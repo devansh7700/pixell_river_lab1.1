@@ -1,0 +1,9 @@
+.department ul {
+  list-style: none;   
+  padding: 0;         
+  margin: 0;
+}
+
+.department li {
+  margin: 6px 0;
+}
