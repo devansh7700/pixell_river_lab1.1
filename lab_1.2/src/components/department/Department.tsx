@@ -1,15 +1,22 @@
 import "./Department.css";
 import type { Department as DepartmentType } from "../../interfaces/Department";
 
-function Department({ department }: { department: DepartmentType }) {
+interface Props {
+  department: DepartmentType;
+}
+
+function Department({ department }: Props) {
   return (
     <section className="department">
       <h2>{department.name}</h2>
-      {department.employees.map((emp, index) => (
-        <p key={index}>
-          {emp.firstName} {emp.lastName ?? ""}
-        </p>
-      ))}
+
+      <ul>
+         {department.employees.map((emp, index) => (
+         <li key={index}>
+           {emp.firstName} {emp.lastName ?? ""}
+         </li>
+         ))}
+      </ul>
     </section>
   );
 }
