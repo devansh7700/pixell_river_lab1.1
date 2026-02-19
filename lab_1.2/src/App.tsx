@@ -1,35 +1,32 @@
-import { useState } from "react";
+import { BrowserRouter, Routes, Route, NavLink } from "react-router-dom";
 import "./App.css";
+
 import Header from "./components/header/Header";
 import Footer from "./components/footer/Footer";
-import Department from "./components/department/Department";
-import AddEmployeeForm from "./components/AddEmployeeform";
 
-import { departments as initialDepartments } from "./data/employees";
-import type { Department as DepartmentType } from "./interfaces/Department";
+import Employees from "./pages/Employees";
+import Organization from "./pages/Organization";
+
 function App() {
-
-  const [departments, setDepartments] = useState<DepartmentType[]>(
-    initialDepartments
-  );
-
   return (
-    <>
+    <BrowserRouter>
       <Header />
 
-      <main>
-        {departments.map((dept) => (
-          <Department key={dept.name} department={dept} />
-        ))}
+      <nav style={{ display: "flex", gap: "20px", padding: "10px" }}>
+        <NavLink to="/employees">Employees</NavLink>
+        <NavLink to="/organization">Organization</NavLink>
+      </nav>
 
-        <AddEmployeeForm
-          departments={departments}
-          setDepartments={setDepartments}
-        />
+      <main>
+        <Routes>
+          <Route path="/employees" element={<Employees />} />
+          <Route path="/organization" element={<Organization />} />
+          <Route path="*" element={<Employees />} />
+        </Routes>
       </main>
 
       <Footer />
-    </>
+    </BrowserRouter>
   );
 }
 
