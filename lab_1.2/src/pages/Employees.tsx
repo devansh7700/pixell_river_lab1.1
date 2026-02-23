@@ -1,13 +1,23 @@
 import Department from "../components/department/Department";
 import AddEmployeeForm from "../components/AddEmployeeForm";
-import { useState } from "react";
-import { departments as initialDepartments } from "../data/employees";
+import { useEffect, useState } from "react";
+import {employeeRepo} from "../repositories/employeeRepo";
 import type { Department as DepartmentType } from "../interfaces/Department";
 
 function Employees() {
-  const [departments, setDepartments] = useState<DepartmentType[]>(
-    initialDepartments
-  );
+  const [departments, setDepartments] = useState<DepartmentType[]>([]);
+
+  
+  // Load departments from repository when page loads
+  useEffect(() => {
+    const data = employeeRepo.getDepartments();
+    setDepartments(data);
+  }, []);
+
+  const refreshDepartments = () => {
+    const data = employeeRepo.getDepartments();
+    setDepartments(data);
+  };
 
   return (
     <>
@@ -15,10 +25,7 @@ function Employees() {
         <Department key={dept.name} department={dept} />
       ))}
 
-      <AddEmployeeForm
-        departments={departments}
-        setDepartments={setDepartments}
-      />
+      <AddEmployeeForm onEmployeeAdded={refreshDepartments} />
     </>
   );
 }

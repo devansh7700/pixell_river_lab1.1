@@ -1,18 +1,23 @@
 import { useFormInput } from "../hooks/useFormInput";
 import { employeeService } from "../services/employeeService";
-import type { Department } from "../interfaces/Department";
+import { employeeRepo } from "../repositories/employeeRepo";
 
 interface Props {
-  departments: Department[];
-  setDepartments: React.Dispatch<React.SetStateAction<Department[]>>;
+  onEmployeeAdded: () => void;
 }
 
-function AddEmployeeForm({ departments, setDepartments }: Props) {
+function AddEmployeeForm({ onEmployeeAdded }: Props) {
   const firstName = useFormInput("");
   const department = useFormInput("");
 
+  const departments = employeeRepo.getDepartments();
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+
+    // Clear previous errors
+    firstName.setError("");
+    department.setError("");
 
     const result = employeeService.createEmployee(
       firstName.value,
@@ -24,8 +29,9 @@ function AddEmployeeForm({ departments, setDepartments }: Props) {
       return;
     }
 
+    // If success
     if (result.data) {
-      setDepartments(result.data);
+      onEmployeeAdded(); // Refresh page data
       firstName.reset();
       department.reset();
     }
