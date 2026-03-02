@@ -9,13 +9,11 @@ export const employeeRepo = {
     return departments;
   },
 
-  createEmployee(employee: Employee, departmentName: string): Department[] {
+  createEmployee(employee: Employee, departmentName: string): void {
     departments = departments.map((dep) =>
       dep.name === departmentName
         ? { ...dep, employees: [...dep.employees, employee] }
         : dep
     );
-
-    return departments;
   },
 };
