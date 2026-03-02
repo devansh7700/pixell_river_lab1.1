@@ -15,9 +15,6 @@ function AddEmployeeForm({ onEmployeeAdded }: Props) {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
-    // Clear previous errors
-    firstName.setError("");
-    department.setError("");
 
     const result = employeeService.createEmployee(
       firstName.value,
@@ -25,12 +22,12 @@ function AddEmployeeForm({ onEmployeeAdded }: Props) {
     );
 
     if (result.error) {
-      firstName.setError(result.error);
+      firstName.validate(() => result.error);
       return;
     }
 
     // If success
-    if (result.data) {
+    if (result.success) {
       onEmployeeAdded(); // Refresh page data
       firstName.reset();
       department.reset();
@@ -46,13 +43,13 @@ function AddEmployeeForm({ onEmployeeAdded }: Props) {
       <input
         type="text"
         value={firstName.value}
-        onChange={(e) => firstName.setValue(e.target.value)}
+        onChange={firstName.onChange}
         placeholder="First Name"
       />
 
       <select
         value={department.value}
-        onChange={(e) => department.setValue(e.target.value)}
+        onChange={department.onChange}
       >
         <option value="">Select Department</option>
         {departments.map((dep) => (
