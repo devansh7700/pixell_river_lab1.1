@@ -22,11 +22,8 @@ export const employeeService = {
 
     const newEmployee: Employee = { firstName };
 
-    const updatedDepartments = employeeRepo.createEmployee(
-      newEmployee,
-      departmentName
-    );
+    employeeRepo.createEmployee(newEmployee, departmentName);
 
-    return { data: updatedDepartments };
+    return { success: true };
   },
 };
