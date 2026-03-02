@@ -8,16 +8,13 @@ function Employees() {
   const [departments, setDepartments] = useState<DepartmentType[]>([]);
 
   
-  // Load departments from repository when page loads
-  useEffect(() => {
-    const data = employeeRepo.getDepartments();
-    setDepartments(data);
-  }, []);
-
-  const refreshDepartments = () => {
-    const data = employeeRepo.getDepartments();
-    setDepartments(data);
+  const loadDepartments = () => {
+    setDepartments(employeeRepo.getDepartments());
   };
+
+  useEffect(() => {
+    loadDepartments();
+  }, []);
 
   return (
     <>
@@ -25,7 +22,7 @@ function Employees() {
         <Department key={dept.name} department={dept} />
       ))}
 
-      <AddEmployeeForm onEmployeeAdded={refreshDepartments} />
+      <AddEmployeeForm onEmployeeAdded={loadDepartments} />
     </>
   );
 }
