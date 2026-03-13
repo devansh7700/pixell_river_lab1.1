@@ -23,7 +23,7 @@ function Employees() {
         <Department key={dept.name} department={dept} />
       ))}
 
-      <AddEmployeeForm onEmployeeAdded={loadDepartments} />
+      <AddEmployeeForm departments={departments} onEmployeeAdded={loadDepartments}/>
     </>
   );
 }
