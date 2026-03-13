@@ -1,19 +1,28 @@
-import { departments as initialDepartments } from "../data/employees";
 import type { Department } from "../interfaces/Department";
 import type { Employee } from "../interfaces/Employee";
 
-let departments: Department[] = [...initialDepartments];
+const API_URL = "http://localhost:3000/employees";
 
 export const employeeRepo = {
-  getDepartments(): Department[] {
-    return departments;
+
+  async getDepartments(): Promise<Department[]> {
+    const response = await fetch(API_URL);
+    return response.json();
   },
 
-  createEmployee(employee: Employee, departmentName: string): void {
-    departments = departments.map((dep) =>
-      dep.name === departmentName
-        ? { ...dep, employees: [...dep.employees, employee] }
-        : dep
-    );
-  },
+  async createEmployee(employee: Employee, departmentName: string) {
+    const response = await fetch(API_URL, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        firstName: employee.firstName,
+        department: departmentName,
+      }),
+    });
+
+    return response.json();
+  }
+
 };
