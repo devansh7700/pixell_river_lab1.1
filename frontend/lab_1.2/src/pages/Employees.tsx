@@ -8,8 +8,9 @@ function Employees() {
   const [departments, setDepartments] = useState<DepartmentType[]>([]);
 
   
-  const loadDepartments = () => {
-    setDepartments(employeeRepo.getDepartments());
+  const loadDepartments = async() => {
+    const data = await employeeRepo.getDepartments();
+    setDepartments(data);
   };
 
   useEffect(() => {
