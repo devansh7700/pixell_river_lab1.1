@@ -17,6 +17,8 @@ function Employees() {
     loadDepartments();
   }, []);
 
+  console.log(departments);
+  
   return (
     <>
       {departments.map((dept) => (
@@ -27,5 +29,7 @@ function Employees() {
     </>
   );
 }
+
+
 
 export default Employees;
