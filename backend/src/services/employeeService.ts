@@ -1,10 +1,13 @@
 import * as repo from "../repositories/employeeRepository";
 
-export function getEmployees() {
-  return repo.getEmployees();
+export async function getEmployees() {
+  return await repo.getEmployees();
 }
 
-export function createEmployee(firstName: string, department: string) {
+export async function createEmployee(
+  firstName: string,
+  department: string
+): Promise<{ success?: boolean; error?: string }> {
   if (!department) {
     return { error: "Department must be selected" };
   }
@@ -13,5 +16,5 @@ export function createEmployee(firstName: string, department: string) {
     return { error: "First name must be at least 3 characters" };
   }
 
-  return repo.createEmployee(firstName, department);
+  return await repo.createEmployee(firstName, department);
 }
