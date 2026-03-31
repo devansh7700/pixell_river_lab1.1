@@ -13,7 +13,7 @@ export async function getEmployees() {
 export async function createEmployee(
   firstName: string,
   department: string
-) {
+): Promise<{ success?: boolean; error?: string }> {
   const dep = await prisma.department.findUnique({
     where: {
       name: department,
