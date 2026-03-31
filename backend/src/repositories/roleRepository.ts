@@ -1,5 +1,7 @@
-import { roles } from "../data/organization";
+import { PrismaClient } from "@prisma/client";
 
-export function getRoles() {
-  return roles;
+const prisma = new PrismaClient();
+
+export async function getRoles() {
+  return prisma.role.findMany();
 }
