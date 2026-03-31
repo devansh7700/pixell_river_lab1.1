@@ -1,35 +1,28 @@
-import { PrismaClient } from "@prisma/client";
+import { Request, Response } from "express";
+import * as employeeService from "../services/employeeService";
 
-const prisma = new PrismaClient();
-
-export async function getEmployees() {
-  return prisma.department.findMany({
-    include: {
-      employees: true,
-    },
-  });
+export async function getEmployees(
+  req: Request,
+  res: Response
+) {
+  const employees = await employeeService.getEmployees();
+  res.json(employees);
 }
 
 export async function createEmployee(
-  firstName: string,
-  department: string
-): Promise<{ success?: boolean; error?: string }> {
-  const dep = await prisma.department.findUnique({
-    where: {
-      name: department,
-    },
-  });
+  req: Request,
+  res: Response
+) {
+  const { firstName, department } = req.body;
 
-  if (!dep) {
-    return { error: "Department not found" };
+  const result = await employeeService.createEmployee(
+    firstName,
+    department
+  );
+
+  if (result.error) {
+    return res.status(400).json(result);
   }
 
-  await prisma.employee.create({
-    data: {
-      firstName,
-      departmentId: dep.id,
-    },
-  });
-
-  return { success: true };
+  return res.status(201).json(result);
 }
