@@ -5,7 +5,7 @@ import "./index.css";
 import App from "./App.tsx";
 
 const clerkPubKey =
-  import.meta.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY;
+  import.meta.env.VITE_CLERK_PUBLISHABLE_KEY;
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
