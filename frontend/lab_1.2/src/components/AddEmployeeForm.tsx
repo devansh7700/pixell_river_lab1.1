@@ -1,6 +1,8 @@
 import { useFormInput } from "../hooks/useFormInput";
 import { employeeRepo } from "../repositories/employeeRepo";
 import type { Department } from "../interfaces/Department";
+import {SignedIn,SignedOut,SignInButton,} from "@clerk/clerk-react";
+
 
 interface Props {
   departments: Department[];
@@ -21,43 +23,60 @@ function AddEmployeeForm({ departments, onEmployeeAdded }: Props) {
     );
 
     if (result.error) {
-      firstName.validate(() => result.error);
+      firstName.validate(() => result.error ?? null);
       return;
     }
     
-    onEmployeeAdded(); // Refresh page data
+    await onEmployeeAdded(); // Refresh page data
     firstName.reset();
     department.reset();
     
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <h3>Add Employee</h3>
+    <>
+      <SignedOut>
+        <div
+          style={{
+            border: "1px solid #ccc",
+            padding: "1rem",
+            marginTop: "1rem",
+          }}
+        >
+          <p>Please log in to add a new employee.</p>
+          <SignInButton />
+        </div>
+      </SignedOut>
 
-      {firstName.error && <p>{firstName.error}</p>}
+      <SignedIn>
+        <form onSubmit={handleSubmit}>
+          <h3>Add Employee</h3>
 
-      <input
-        type="text"
-        value={firstName.value}
-        onChange={firstName.onChange}
-        placeholder="First Name"
-      />
+          {firstName.error && <p>{firstName.error}</p>}
 
-      <select
-        value={department.value}
-        onChange={department.onChange}
-      >
-        <option value="">Select Department</option>
-        {departments.map((dep) => (
-          <option key={dep.name} value={dep.name}>
-            {dep.name}
-          </option>
-        ))}
-      </select>
+          <input
+            type="text"
+            value={firstName.value}
+            onChange={firstName.onChange}
+            placeholder="First Name"
+          />
 
-      <button type="submit">Add Employee</button>
-    </form>
+          <select
+            value={department.value}
+            onChange={department.onChange}
+          >
+            <option value="">Select Department</option>
+            {departments.map((dep) => (
+              <option key={dep.name} value={dep.name}>
+                {dep.name}
+              </option>
+            ))}
+          </select>
+
+          <button type="submit">Add Employee</button>
+        </form>
+      </SignedIn>
+    </>
   );
 }
 

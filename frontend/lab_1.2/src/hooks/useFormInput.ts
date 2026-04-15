@@ -2,28 +2,34 @@ import { useState } from "react";
 
 export function useFormInput(initialValue: string) {
   const [value, setValue] = useState(initialValue);
-  const [error, setError] = useState("");
+  const [error, setError] = useState<string | null>(null);
 
-  const onChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+  const onChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+  ) => {
     setValue(e.target.value);
-    setError(""); // clear error when user types
+    setError(null);
   };
 
-  const validate = (validator: (val: string) => string | null) => {
-    const validationResult = validator(value);
-     setError(validationResult ?? "");
-    return validationResult;
-  };
   const reset = () => {
     setValue("");
-    setError("");
+    setError(null);
+  };
+
+  const validate = (
+    validator: () => string | null
+  ) => {
+    const validationError = validator();
+    setError(validationError);
   };
 
   return {
     value,
-    error,
+    setValue,
     onChange,
-    validate,
     reset,
+    error,
+    setError,
+    validate,
   };
 }
