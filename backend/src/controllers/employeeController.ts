@@ -1,4 +1,5 @@
 import { Request, Response } from "express";
+import { getAuth } from "@clerk/express";
 import * as employeeService from "../services/employeeService";
 
 export async function getEmployees(
@@ -13,6 +14,15 @@ export async function createEmployee(
   req: Request,
   res: Response
 ) {
+
+  const { userId } = getAuth(req);
+
+  if (!userId) {
+    return res.status(401).json({
+      error: "Unauthorized. Please log in.",
+    });
+  }
+
   const { firstName, department } = req.body;
 
   const result = await employeeService.createEmployee(
