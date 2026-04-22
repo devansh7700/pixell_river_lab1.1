@@ -1,21 +1,22 @@
 import Department from "../components/department/Department";
 import AddEmployeeForm from "../components/AddEmployeeForm";
-import { useEffect, useState } from "react";
+import { useQuery } from "@tanstack/react-query";
 import {employeeRepo} from "../repositories/employeeRepo";
 import type { Department as DepartmentType } from "../interfaces/Department";
 
 function Employees() {
-  const [departments, setDepartments] = useState<DepartmentType[]>([]);
+  const {
+    data: departments = [],
+    isLoading,
+    error,
+    refetch,
+  } = useQuery<DepartmentType[]>({
+    queryKey: ["departments"],
+    queryFn: employeeRepo.getDepartments,
+  });
 
-  
-  const loadDepartments = async() => {
-    const data = await employeeRepo.getDepartments();
-    setDepartments(data);
-  };
-
-  useEffect(() => {
-    loadDepartments();
-  }, []);
+  if (isLoading) return <p>Loading...</p>;
+  if (error) return <p>Error loading employees</p>;
 
   console.log(departments);
   
@@ -25,7 +26,7 @@ function Employees() {
         <Department key={dept.name} department={dept} />
       ))}
 
-      <AddEmployeeForm departments={departments} onEmployeeAdded={loadDepartments}/>
+      <AddEmployeeForm departments={departments} onEmployeeAdded={refetch}/>
     </>
   );
 }
