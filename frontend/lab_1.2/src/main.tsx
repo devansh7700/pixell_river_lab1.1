@@ -13,8 +13,9 @@ const queryClient = new QueryClient();
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <ClerkProvider publishableKey={clerkPubKey}>
-      <QueryClientProvider client={queryClient}></QueryClientProvider>
-      <App />
+      <QueryClientProvider client={queryClient}>
+        <App />
+      </QueryClientProvider>
     </ClerkProvider>
   </StrictMode>
 );
